@@ -1,8 +1,9 @@
 import "./App.css";
 import Board from "./components/Board";
 import "./styles/root.scss";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { calculateWinner } from "./helpers";
+import History from "./components/History";
 
 function App() {
   // const [history, setHistory] = useState([
@@ -50,7 +51,8 @@ function App() {
   const handleSquareClick = (position) => {
     if (current.board[position] || winner) return;
     setHistory((prev) => {
-      const last = history[history.length - 1];
+      // if(currentMove < prev.length - 1)
+      const last = prev[prev.length - 1];
       const newBoard = last.board.map((square, pos) => {
         if (pos === position) return last.isXNext ? "X" : "O";
         return square;
@@ -61,19 +63,17 @@ function App() {
   };
 
   console.log(history);
+
+  const moveTo = (move) => {
+    setCurrentMove(move);
+  };
   return (
     <div className="app">
       <h1>TIC TAC TOE</h1>
       <h2>{message}</h2>
       <Board board={current.board} handleSquareClick={handleSquareClick} />
       <h2>Current Game History</h2>
-      {/* <div>
-        {moves.map((move) => (
-          <button type="button" onClick={() => handleMove(move)}>
-            Go to move #{move.moveNo}
-          </button>
-        ))}
-      </div> */}
+      <History history={history} moveTo={moveTo} currentMove={currentMove} />
     </div>
   );
 }
